@@ -24,7 +24,7 @@ const ButtonComponent = ({ url = '/', text = 'Home', onClose }) => {
 
 const Header = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   const user = {
     role: 'admin',
   };
