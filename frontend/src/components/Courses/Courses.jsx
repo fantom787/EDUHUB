@@ -78,20 +78,22 @@ const CourseCard = ({
   );
 };
 
+export const categories = [
+  'Web Develeopment',
+  'Artificial Intellegence',
+  'Data Structures and Algorithms',
+  'Data Science',
+  'App Develeopment',
+  'Game Develeopment',
+];
+
 const Courses = () => {
   const [keyword, setKeyword] = useState();
   const [category, setCategory] = useState();
   const addToPlaylistHandler = id => {
     console.log(id);
   };
-  const categories = [
-    'Web Develeopment',
-    'Artificial Intellegence',
-    'Data Structures and Algorithms',
-    'Data Science',
-    'App Develeopment',
-    'Game Develeopment',
-  ];
+
   return (
     <Container minH={'95vh'} maxW={'container.lg'} paddingY={'8'}>
       <Heading children='All Courses' m={'8'} />

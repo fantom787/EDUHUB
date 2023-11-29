@@ -1,7 +1,7 @@
 const data = `
 1. AGREEMENT TO TERMS
 
-These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“you”) and Video Streaming ("Company", “we”, “us”, or “our”), concerning your access to and use of the https://instagram.com/ig_ambuj21 website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the “Site”). We are registered in India and have our registered office at asasddasd, dasdasd, UP 4534534. You agree that by accessing the Site, you have read, understood, and agree to be bound by all of these Terms of Use. IF YOU DO NOT AGREE WITH ALL OF THESE TERMS OF USE, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SITE AND YOU MUST DISCONTINUE USE IMMEDIATELY.
+These Terms of Use constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“you”) and Video Streaming ("Company", “we”, “us”, or “our”), concerning your access to and use of the https://instagram.com/ig_ambuj21 website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the “Site”). We are registered in India and have our registered office at asasddasd, dasdasd, DELHI 4534534. You agree that by accessing the Site, you have read, understood, and agree to be bound by all of these Terms of Use. IF YOU DO NOT AGREE WITH ALL OF THESE TERMS OF USE, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SITE AND YOU MUST DISCONTINUE USE IMMEDIATELY.
 
 Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms of Use at any time and for any reason. We will alert you about any changes by updating the “Last updated” date of these Terms of Use, and you waive any right to receive specific notice of each such change. Please ensure that you check the applicable Terms every time you use our Site so that you understand which Terms apply. You will be subject to, and will be deemed to have been made aware of and to have accepted, the changes in any revised Terms of Use by your continued use of the Site after the date such revised Terms of Use are posted.
 
@@ -195,7 +195,7 @@ In order to resolve a complaint regarding the Site or to receive further informa
 
 Video Streaming
 asasddasd
-dasdasd, UP 4534534
+dasdasd, DELHI 4534534
 India
 Phone: 9205337728
 ambuj14sept@gmail.com

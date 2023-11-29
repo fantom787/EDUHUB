@@ -21,7 +21,7 @@ export const fileUploadCss = {
   backgroundColor: 'white',
 };
 
-const fileUploadStyle = {
+export const fileUploadStyle = {
   '&::file-selector-button': fileUploadCss,
 };
 
