@@ -5,11 +5,16 @@ import { sendToken } from "../Utils/sendToken.js";
 import { sendEmail } from "../Utils/sendEmail.js";
 import crypto from "crypto";
 import { Course } from "../Model/CourseModel.js";
-
+import cloudinary from "cloudinary";
+import { getDataUri } from "../Utils/dataUri.js";
+import { Stats } from "../Model/StatsModel.js";
 export const register = CatchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
-  //   const file = req.file;
-  if (!name || !email || !password) {
+
+  console.log(name, email, password);
+  const file = req.file;
+
+  if (!name || !email || !password || !file) {
     return next(new ErrorHandler("Please Enter All Feilds", 400));
   }
 
@@ -19,15 +24,16 @@ export const register = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler("User Already Exits", 409));
   }
 
-  // upload file on cloudinary
+  const fileUri = getDataUri(file);
+  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
 
   user = await User.create({
     name,
     email,
     password,
     avtar: {
-      public_id: "tempid",
-      url: "tempurl",
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
     },
   });
   sendToken(res, user, "Registered Successfully", 201);
@@ -35,7 +41,6 @@ export const register = CatchAsyncError(async (req, res, next) => {
 
 export const login = CatchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
-  //   const file = req.file;
   console.log("email: " + email + " password: " + password);
   if (!email || !password) {
     return next(new ErrorHandler("Please Enter All Feilds", 400));
@@ -111,7 +116,22 @@ export const updateProfile = CatchAsyncError(async (req, res, next) => {
 });
 
 export const updateProfilePicture = CatchAsyncError(async (req, res, next) => {
-  // cloudinary  : TODO
+  const file = req.file;
+
+  const user = await User.findById(req.user._id);
+
+  const fileUri = getDataUri(file);
+  const myCloud = await cloudinary.v2.uploader.upload(fileUri.content);
+
+  await cloudinary.v2.uploader.destroy(user.avtar.public_id);
+
+  user.avtar = {
+    public_id: myCloud.public_id,
+    url: myCloud.secure_url,
+  };
+
+  await user.save();
+
   res.status(200).json({
     success: true,
     message: "Profile Picture Updated Successfully",
@@ -214,4 +234,81 @@ export const removeFromPlaylist = CatchAsyncError(async (req, res, next) => {
     success: true,
     message: "Removed From Playlist",
   });
+});
+
+// admin controllers
+
+export const getAllUsers = CatchAsyncError(async (req, res, next) => {
+  const users = await User.find({});
+  res.status(200).json({
+    success: true,
+    users,
+  });
+});
+
+export const updateUserRole = CatchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ErrorHandler("Uses Not Found", 404));
+  }
+  if (user.role === "user") {
+    user.role = "admin";
+  } else {
+    user.role = "user";
+  }
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Role Updated",
+  });
+});
+
+export const deleteUser = CatchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ErrorHandler("Uses Not Found", 404));
+  }
+
+  await cloudinary.v2.uploader.destroy(user.avtar.public_id);
+
+  // cancel subscription
+
+  await user.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "User Deleted Successfully",
+  });
+});
+
+export const deleteMyProfile = CatchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+
+  await cloudinary.v2.uploader.destroy(user.avtar.public_id);
+
+  // cancel subscription
+
+  await user.deleteOne();
+  const options = {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+    // secure: true,
+    sameSite: "none",
+  };
+  res.status(200).cookie("token", null, options).json({
+    success: true,
+    message: "User Deleted Successfully",
+  });
+});
+
+User.watch().on("change", async () => {
+  const stats = await Stats.find({}).sort({ createdAt: "desc" }).limit(1);
+  const subscription = await User.find({ "subscription.status": "active" });
+  stats[0].subscription = subscription.length;
+  stats[0].users = await User.countDocuments();
+  stats[0].createdAt = new Date(Date.now());
+
+  await stats[0].save();
 });

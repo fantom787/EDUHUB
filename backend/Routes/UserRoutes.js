@@ -2,7 +2,10 @@ import express from "express";
 import {
   addToPlaylist,
   changePassword,
+  deleteMyProfile,
+  deleteUser,
   forgetPassword,
+  getAllUsers,
   getMyProfile,
   login,
   logout,
@@ -11,21 +14,29 @@ import {
   resetPassword,
   updateProfile,
   updateProfilePicture,
+  updateUserRole,
 } from "../Controller/userController.js";
-import { isAuthenticated } from "../Middleware/isAuthenticated.js";
+import {
+  authorizedAdmin,
+  isAuthenticated,
+} from "../Middleware/isAuthenticated.js";
+import singleUpload from "../Middleware/multer.js";
 
 const userRouter = express.Router();
 // to register a new user
-userRouter.route("/register").post(register);
+userRouter.route("/register").post(singleUpload, register);
 
 // login
 userRouter.route("/login").post(login);
 
 // logout
-userRouter.route("/logout").get(logout);
+userRouter.route("/logout").get(isAuthenticated, logout);
 
 // get my profile
 userRouter.route("/me").get(isAuthenticated, getMyProfile);
+
+// delete my profile
+userRouter.route("/me").delete(isAuthenticated, deleteMyProfile);
 
 // change password
 userRouter.route("/changepassword").put(isAuthenticated, changePassword);
@@ -35,7 +46,7 @@ userRouter.route("/updateprofile").put(isAuthenticated, updateProfile);
 // update profile picture
 userRouter
   .route("/updateprofilepicture")
-  .put(isAuthenticated, updateProfilePicture);
+  .put(isAuthenticated, singleUpload, updateProfilePicture);
 
 // forget password
 userRouter.route("/forgetpassword").post(forgetPassword);
@@ -51,4 +62,15 @@ userRouter
   .route("/removefromplaylist")
   .delete(isAuthenticated, removeFromPlaylist);
 
+// get all users -- admin
+
+userRouter
+  .route("/admin/users")
+  .get(isAuthenticated, authorizedAdmin, getAllUsers);
+
+// update role
+userRouter
+  .route("/admin/users/:id")
+  .put(isAuthenticated, authorizedAdmin, updateUserRole)
+  .delete(isAuthenticated, authorizedAdmin, deleteUser);
 export default userRouter;

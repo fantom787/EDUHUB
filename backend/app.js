@@ -2,8 +2,10 @@ import express from "express";
 import { config } from "dotenv";
 import courseRouter from "./Routes/CourseRoutes.js";
 import userRouter from "./Routes/UserRoutes.js";
+import paymentRouter from "./Routes/paymentRoutes.js";
 import { ErrorMiddleware } from "./Middleware/ErrorMiddleware.js";
 import cookieParser from "cookie-parser";
+import otherRouter from "./Routes/otherRoutes.js";
 
 config({
   path: "./Config/config.env",
@@ -23,6 +25,11 @@ app.use(cookieParser());
 app.use("/api/v1", courseRouter);
 /** User Routes */
 app.use("/api/v1", userRouter);
+// payment router
+app.use("/api/v1", paymentRouter);
+
+// other router
+app.use("/api/v1", otherRouter);
 
 export default app;
 
